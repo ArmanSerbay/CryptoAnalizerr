@@ -11,7 +11,7 @@ public class Main {
 
 
     public static void main(String[] args) throws Exception {
-        while (true) {
+
             Scanner scanner = new Scanner(System.in);
             System.out.println("Криптоанализ");
             System.out.println("Input operation");
@@ -25,7 +25,10 @@ public class Main {
             } else {
                 System.out.println("Wrong number");
             }
+//        char s = '!';
+//        char s2 = Character.toUpperCase('!');
+//        System.out.println(s == s2);
         }
     }
-        }
+
 
