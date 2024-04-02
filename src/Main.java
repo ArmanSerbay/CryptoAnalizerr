@@ -21,7 +21,7 @@ public class Main {
             if (operation.equals("1")) {
                 Encryption.encryption();
             } else if (operation.equals("2")) {
-
+                Decipher.decipher();
             } else {
                 System.out.println("Wrong number");
             }
