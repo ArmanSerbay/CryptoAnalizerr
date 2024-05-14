@@ -1,34 +1,35 @@
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-
-
     public static void main(String[] args) throws Exception {
+        printMainMenu();
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Криптоанализ");
-            System.out.println("Input operation");
-            System.out.println("1-cipher");
-            System.out.println("2-decipher");
-            String operation = scanner.nextLine();
-            if (operation.equals("1")) {
-                Encryption.encryption();
-            } else if (operation.equals("2")) {
-                Decipher.decipher();
-            } else {
-                System.out.println("Wrong number");
-            }
-//        char s = '!';
-//        char s2 = Character.toUpperCase('!');
-//        System.out.println(s == s2);
+        Scanner scanner = new Scanner(System.in);
+        String operation = scanner.nextLine();
+
+        if (operation.equals("1")) {
+            Encryption.encryption();
+        } else if (operation.equals("2")) {
+            Decipher.decryption();
+        } else if (operation.equals("3")) {
+            BruteForce.bruteforce();
+        } else {
+            System.out.println("Wrong number");
         }
     }
+
+    private static void printMainMenu() {
+        System.out.println("""
+                Криптоанализ
+                Input operation
+                1-cipher
+                2-decipher
+                3-bruteforce
+                4-wrong number
+                """);
+    }
+
+}
 
 

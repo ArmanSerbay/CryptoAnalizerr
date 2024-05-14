@@ -1,78 +1,68 @@
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Encryption {
 
-    private static final List<Character> ALPHABET = Arrays.asList('а', 'б', 'в',
+    private static final List<Character> ALPHABET = List.of('а', 'б', 'в',
             'г', 'д', 'е', 'ж', 'з', 'и', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у',
-            'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'я', '.', ',', '«', '»',
-            ':', '!', '?', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+            'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'я',
+            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У',
+            'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Я',
+            '.', ',', '«', '»', ':', '!', '?', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
-
-
-    public static void encryption() throws Exception {
+    public static void encryption() throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the key");
         int key = scanner.nextInt();
-        String inn = "D:\\IT\\Chifr\\arman.txt";
-        String outt = "D:\\IT\\Chifr\\astana.txt";
+        String inn = "src\\Resources\\astana.txt";
+        String out = "src\\Resources\\arman.txt";
 
+        Path inputPath = Paths.get(inn);
+        Path outputPath = Paths.get(out);
 
-        try (
-                FileReader reader = new FileReader(inn);
-                FileWriter writer = new FileWriter(outt)) {
-            while (reader.ready()) {
-                char ch = (char) reader.read();
-                List<Character> list = Arrays.asList(Character.valueOf(ch));
-                for (Character str : list) {
-                    for (Character sym : ALPHABET) {
-                        if (str == Character.toUpperCase(str)) {
-                            if (Character.toLowerCase(str) == Character.toLowerCase(sym)) {
-                                int index = ALPHABET.indexOf(sym) + key;
-                                if (index >= ALPHABET.size()) {
-                                    int indexx = index - ALPHABET.size();
-                                    Character getSymbol = ALPHABET.get(indexx);
-                                    Character gett = Character.toUpperCase(getSymbol);
-                                    writer.write(gett);
+        List<String> lines = Files.readAllLines(inputPath, StandardCharsets.UTF_8);
+        List<String> encryptedLines = lines.stream()
+                .map(line -> encryptedLine(line, key))
+                .collect(Collectors.toList());
 
-                                } else  {
-                                    Character aa = ALPHABET.get(index);
-                                    Character bb = Character.toUpperCase(aa);
-                                    writer.write(bb);
+        Files.write(outputPath, encryptedLines, StandardCharsets.UTF_8);
+    }
 
-                                }
-                            }else if(!ALPHABET.contains(Character.toLowerCase(str))) {
-                                writer.write(str);
-                                break;
-                            }
-                        }else if (Character.toLowerCase(str) == Character.toLowerCase(sym)) {
-                            int indext = ALPHABET.indexOf(sym) + key;
-                            if (indext >= ALPHABET.size()) {
-                                int indexx = indext - ALPHABET.size();
-                                Character getSymbol = ALPHABET.get(indexx);
-                                writer.write(getSymbol);
-                            } else {
-                                Character aa = ALPHABET.get(indext);
-                                writer.write(aa);
-                            }
+    private static String encryptedLine(String line, int key) {
+        StringBuilder encryptedLine = new StringBuilder();
 
-
-                        }else if(!ALPHABET.contains(str)){
-                            writer.write(str);
-                            break;
-                        }
-
-                    }
-
-                }
+        for (char symbolForEncryption : line.toCharArray()) {
+            if (ALPHABET.contains(symbolForEncryption)) {
+                char encryptedChar = encryptChar(symbolForEncryption, key);
+                encryptedLine.append(encryptedChar);
+            } else {
+                encryptedLine.append(symbolForEncryption);
             }
+        }
+        return encryptedLine.toString();
+    }
 
+    private static char encryptChar(char symbolForEncryption, int key) {
+        int index;
+        int encryptedSymbolIndex = ALPHABET.indexOf(symbolForEncryption) + key;
+        if (encryptedSymbolIndex >= ALPHABET.size()) {
+            encryptedSymbolIndex = encryptedSymbolIndex - ALPHABET.size();
+            Character encryptedSymbol = ALPHABET.get(encryptedSymbolIndex);
+            return encryptedSymbol;
+        } else {
+            Character symbol = ALPHABET.get(encryptedSymbolIndex);
+            return symbol;
         }
     }
 
-
 }
+
+
+
+
